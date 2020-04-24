@@ -30,7 +30,6 @@
                 <el-button size="small" type="primary" @click="exports">导出excel</el-button>
             </el-form-item>
         </el-form>
-        <div style="width: 100%;height: 16px;background: #f0f2f5"></div>
         <el-table
                 border
                 stripe
@@ -39,42 +38,50 @@
                 :row-class-name="tableRowClassName"
                 style="width: 100%">
             <el-table-column
+                    fixed="left"
                     align="center"
                     prop="MIID"
-                    label="ID">
+                    label="ID"
+                    width="80">
             </el-table-column>
             <el-table-column
+                    fixed="left"
                     align="center"
                     prop="nickname"
-                    label="姓名">
+                    label="姓名"
+                    width="90">
             </el-table-column>
             <el-table-column
                     align="center"
                     prop="company"
-                    label="单位名称">
+                    label="单位名称"
+                    min-width="180">
             </el-table-column>
             <el-table-column
                     align="center"
                     prop="mobile"
-                    label="手机号">
+                    label="手机号"
+                    width="120">
             </el-table-column>
             <el-table-column
                     align="center"
                     prop="id_card"
-                    label="身份证号">
+                    label="身份证号"
+                    min-width="180">
             </el-table-column>
             <el-table-column
                     align="center"
                     prop="health_id_card"
-                    label="健康证号">
+                    label="健康证号"
+                    min-width="180">
             </el-table-column>
             <el-table-column
                     align="center"
                     label="人脸照片"
-                    min-width="80">
+                    min-width="100">
                 <template slot-scope="scope">
                     <el-image
-                            style="width: 60px; height: 60px;"
+                            style="width: 35px; height: 35px;"
                             :src="scope.row.faceThumbPath[0]"
                             :preview-src-list="scope.row.faceThumbPath">
                     </el-image>
@@ -83,10 +90,10 @@
             <el-table-column
                     align="center"
                     label="健康证照片"
-                    min-width="80">
+                    min-width="100">
                 <template slot-scope="scope">
                     <el-image
-                            style="width: 60px; height: 60px"
+                            style="width: 35px; height: 35px"
                             :src="scope.row.healthCardPath[0]"
                             :preview-src-list="scope.row.healthCardPath">
                     </el-image>
@@ -95,17 +102,20 @@
             <el-table-column
                     align="center"
                     prop="health_endtime"
-                    label="健康证到期时间">
+                    label="健康证到期时间"
+                    width="130">
             </el-table-column>
             <el-table-column
                     align="center"
                     prop="member_type"
-                    label="人员类别">
+                    label="人员类别"
+                    min-width="130">
             </el-table-column>
             <el-table-column
                     align="center"
                     prop="timeStr"
-                    label="添加时间">
+                    label="添加时间"
+                    width="170">
             </el-table-column>
             <el-table-column
                     align="center"
@@ -347,7 +357,7 @@
                 params = this.$secret_key.func(this.$store.state.on_off, params);
                 this.$https.fetchPost('/plugin/school/api_index/out_health_list',params).then((res) => {
                     var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
-                    window.location.href=res_data;
+                    window.location.href=this.$store.state.route.http + res_data;
                 })
             },
             delList(id){

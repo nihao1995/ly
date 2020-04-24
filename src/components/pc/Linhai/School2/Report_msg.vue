@@ -25,7 +25,6 @@
                 <el-button size="small" type="primary" @click="search">搜索</el-button>
             </el-form-item>
         </el-form>
-        <div style="width: 100%;height: 16px;background: #f0f2f5"></div>
         <el-table
                 border
                 stripe
@@ -35,7 +34,8 @@
             <el-table-column
                     align="center"
                     prop="id"
-                    label="ID">
+                    label="ID"
+                    width="80">
             </el-table-column>
             <el-table-column
                     align="center"
@@ -50,10 +50,10 @@
             <el-table-column
                     align="center"
                     label="图片信息"
-                    min-width="80">
+                    width="100">
                 <template slot-scope="scope">
                     <el-image v-if="scope.row.path&&scope.row.path.length>0"
-                            style="width: 60px; height: 60px;"
+                            style="width: 35px; height: 35px;"
                             :src="scope.row.path[0]"
                             :preview-src-list="scope.row.path">
                     </el-image>
@@ -70,7 +70,8 @@
             <el-table-column
                     align="center"
                     prop="personCharge"
-                    label="负责人">
+                    label="负责人"
+                    width="100">
             </el-table-column>
             <el-table-column
                     align="center"
@@ -80,7 +81,8 @@
             <el-table-column
                     align="center"
                     prop="timeStr"
-                    label="日期">
+                    label="日期"
+                    min-width="100">
             </el-table-column>
             <el-table-column
                     align="center"
