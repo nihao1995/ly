@@ -156,6 +156,7 @@
             back(){
                 this.$refs.map.init("LinHai");
                 this.getMen();
+                this.getOnlinestate()
                 this.city_name = '临海市';
                 this.showBack = false;
             },
@@ -163,6 +164,7 @@
                 let params ={'uid':this.$store.state.user.uid};
                 this.$https.fetchPost('/plugin/statistics/api_index/getmapselectdir',params).then((res) => {
                     this.getMen();
+                    this.getOnlinestate()
                     this.$nextTick(function () {
                         let that = this;
                         setTimeout(()=>{
@@ -292,7 +294,7 @@
             getOnlinestate(indexCode){//获取摄像头在线状况
                 let params ={'indexCode':indexCode};
                 params = this.$secret_key.func(this.$store.state.on_off, params);
-                this.$https.fetchPost('/plugin/statistics/api_index/online').then((res) => {
+                this.$https.fetchPost('/plugin/statistics/api_index/online',params).then((res) => {
                     var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
                     this.online_state = res_data
                 })
