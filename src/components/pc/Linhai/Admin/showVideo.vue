@@ -10,6 +10,8 @@
             <el-tree
                     class="filter-tree"
                     :data="data"
+                    :load="loadNode"
+                    lazy
                     :props="defaultProps"
                     :filter-node-method="filterNode"
                     @node-click="getvideo"
@@ -21,7 +23,7 @@
 </template>
 
 <script>
-    import { Input,Tree } from 'element-ui'
+    import { Input,Tree,Message } from 'element-ui'
     import Hik from "../component/Hik";
     import elementResizeDetectorMaker from "element-resize-detector"
 
@@ -61,18 +63,36 @@
                 this.videoinit();
             },
             getList(){ //获取地区列表
-                let params ={};
-                params = this.$secret_key.func(this.$store.state.on_off, params);
                 this.$https.fetchPost('/plugin/statistics/api_index/getRegionCatalog').then((res) => {
                     var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
                     this.data = res_data
                 })
             },
+            loadNode(node, resolve) {
+                switch (node.level) {
+                    case 1:
+                        resolve(node.data.children);
+                        break;
+                    case 2:
+                        let params ={'dir_id':node.data.id};
+                        params = this.$secret_key.func(this.$store.state.on_off, params);
+                        this.$https.fetchPost('/plugin/statistics/api_index/schoolOnline',params).then((res) => {
+                            var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
+                            resolve(res_data);
+                        })
+                        break;
+                    default:
+                        resolve([]);
+                        break;
+                }
+            },
             getvideo(data){//选择摄像头
-                let _this=this
-                if(!data.children){
-                    this.$refs.H1.videoPlay(data.cameraIndexCode);//传入摄像头编码
-                    // console.log(data.cameraIndexCode)
+                if(data.value){
+                    if (data.value == 2) {
+                        this.$refs.H1.videoPlay(data.cameraIndexCode);//传入摄像头编码
+                    }else{//如果摄像头离线
+                        Message.error('该摄像头处于离线状态，');
+                    }
                 }
             },
             videoinit(){//初始化视频插件

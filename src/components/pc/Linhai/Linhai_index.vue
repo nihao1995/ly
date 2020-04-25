@@ -33,9 +33,10 @@
                 <div class="cont1">
                     <dv-border-box-7 title="健康证图表" class="box1" ref="box3" :titleWidth=160>
                         <h2>健康证图表</h2>
-                        <div style="width: 100%;height: 100%;display: flex;justify-content: space-between;margin-top: -20px">
-                            <Customized :type="1" :data="regions_chart.area_chart" ref="Customized" style="width: 50%;height: 100%"></Customized>
-                            <Customized :type="2" :data="regions_chart.school_general" ref="Customized1" style="width: 50%;height: 100%"></Customized>
+                        <div style="width: 100%;height: 100%;display: flex;justify-content: space-between;margin: -20px -10px 0;">
+                            <Customized :type="1" :data="regions_chart.area_chart" ref="Customized" style="width: 33.333%;height: 100%"></Customized>
+                            <Customized :type="2" :data="regions_chart.school_general" ref="Customized1" style="width: 33.333%;height: 100%"></Customized>
+                            <Customized :type="3" :data="online_state" ref="Customized2" style="width: 33.333%;height: 100%"></Customized>
                         </div>
                     </dv-border-box-7>
                     <dv-border-box-7 title="学校违规情况" class="box1" ref="box4" :titleWidth=160>
@@ -89,6 +90,7 @@
                     school_general:[],
                     stat_people:[],
                 },
+                online_state:[],//摄像头在线状况
                 indexCode:'',
                 options:'',
                 normal:[''],
@@ -154,6 +156,7 @@
             back(){
                 this.$refs.map.init("LinHai");
                 this.getMen();
+                this.getOnlinestate()
                 this.city_name = '临海市';
                 this.showBack = false;
             },
@@ -161,6 +164,7 @@
                 let params ={'uid':this.$store.state.user.uid};
                 this.$https.fetchPost('/plugin/statistics/api_index/getmapselectdir',params).then((res) => {
                     this.getMen();
+                    this.getOnlinestate()
                     this.$nextTick(function () {
                         let that = this;
                         setTimeout(()=>{
@@ -198,6 +202,7 @@
                             that.init_child("Dataset");
                             that.init_child("Customized");
                             that.init_child("Customized1");
+                            that.init_child("Customized2");
                         },500)
                     })
                 })
@@ -251,6 +256,7 @@
                 });
                 this.city_name = city_name;
                 this.getMen(indexCode);
+                this.getOnlinestate(indexCode)
             },
             getWeigui(row){
                 this.$router.push('/Intelligence/School_show')
@@ -284,6 +290,14 @@
                 }else{
                     this.$router.push('/Intelligence/Key_personnel')
                 }
+            },
+            getOnlinestate(indexCode){//获取摄像头在线状况
+                let params ={'indexCode':indexCode};
+                params = this.$secret_key.func(this.$store.state.on_off, params);
+                this.$https.fetchPost('/plugin/statistics/api_index/online',params).then((res) => {
+                    var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
+                    this.online_state = res_data
+                })
             }
         },
         mounted() {
@@ -292,6 +306,7 @@
             this.getAdd();
             this.getSchool();
             this.getTime();
+            this.getOnlinestate();
             var that = this;
             bus.$on("outmes", function(mes) {
                 let arr = [];

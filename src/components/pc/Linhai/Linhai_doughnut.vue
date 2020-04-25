@@ -61,6 +61,7 @@
                     dataName.push(res.name);
                     total += parseFloat(res.value) * 10000;
                 });
+                
                 total = total / 10000;
 
                 // 指定图表的配置项和数据
@@ -79,14 +80,14 @@
                                 rich: {
                                     value: {
                                         color: '#fff',
-                                        fontSize: 22,
+                                        fontSize: 20,
                                         fontWeight: 'bold',
-                                        lineHeight: 25,
+                                        lineHeight: 24,
                                     },
                                     name: {
-                                        fontSize: 16,
+                                        fontSize: 15,
                                         color: '#d4d4d4',
-                                        lineHeight: 25
+                                        lineHeight: 24
                                     },
                                 },
                             },
@@ -100,7 +101,7 @@
                             {
                                 name: '健康证信息',
                                 type: 'pie',
-                                radius: ['50%', '70%'],
+                                radius: ['60%', '85%'],
                                 avoidLabelOverlap: false,
                                 zlevel: 1,
                                 label: {
@@ -134,14 +135,14 @@
                                 rich: {
                                     value: {
                                         color: '#fff',
-                                        fontSize: 22,
+                                        fontSize: 20,
                                         fontWeight: 'bold',
-                                        lineHeight: 25,
+                                        lineHeight: 24,
                                     },
                                     name: {
-                                        fontSize: 16,
+                                        fontSize: 15,
                                         color: '#d4d4d4',
-                                        lineHeight: 25
+                                        lineHeight: 24
                                     },
                                 },
                             },
@@ -155,7 +156,62 @@
                             {
                                 name: '学校信息',
                                 type: 'pie',
-                                radius: ['50%', '70%'],
+                                radius: ['60%', '85%'],
+                                avoidLabelOverlap: false,
+                                zlevel: 1,
+                                label: {
+                                    normal: {
+                                        padding: [30, 30, 30, 30],
+                                        backgroundColor: '#fff',
+                                        show: false,
+                                        position: 'center'
+                                    },
+                                },
+                                labelLine: {
+                                    normal: {
+                                        show: false
+                                    }
+                                },
+                                data: this.data
+                            }
+                        ]
+                    };
+                }else if(this.type == 3){
+                    option = {
+                        title: {
+                            zlevel: 0,
+                            x: 'center',
+                            y: 'center',
+                            text: [
+                                '{value|' + total + '}',
+                                '{name|摄像头在线数}',
+                            ].join('\n'),
+                            textStyle: {
+                                rich: {
+                                    value: {
+                                        color: '#fff',
+                                        fontSize: 20,
+                                        fontWeight: 'bold',
+                                        lineHeight: 24,
+                                    },
+                                    name: {
+                                        fontSize: 15,
+                                        color: '#d4d4d4',
+                                        lineHeight: 24
+                                    },
+                                },
+                            },
+                        },
+                        color: ['#63ad82','#c23531'],
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: '{a} <br/>{b}: {c} ({d}%)'
+                        },
+                        series: [
+                            {
+                                name: '摄像头状况',
+                                type: 'pie',
+                                radius: ['60%', '85%'],
                                 avoidLabelOverlap: false,
                                 zlevel: 1,
                                 label: {
@@ -189,14 +245,14 @@
                                 rich: {
                                     value: {
                                         color: '#333',
-                                        fontSize: 22,
+                                        fontSize: 20,
                                         fontWeight: 'bold',
-                                        lineHeight: 25,
+                                        lineHeight: 24,
                                     },
                                     name: {
-                                        fontSize: 16,
+                                        fontSize: 15,
                                         color: '#999',
-                                        lineHeight: 25
+                                        lineHeight: 24
                                     },
                                 },
                             },
@@ -215,7 +271,7 @@
                             {
                                 name: '健康证信息',
                                 type: 'pie',
-                                radius: ['50%', '70%'],
+                                radius: ['60%', '85%'],
                                 avoidLabelOverlap: false,
                                 zlevel: 1,
                                 label: {
