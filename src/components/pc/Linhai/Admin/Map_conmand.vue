@@ -41,6 +41,8 @@
                     <el-tree
                             class="filter-tree"
                             :data="data2"
+                            :load="loadNode"
+                            lazy
                             :props="defaultProps2"
                             :filter-node-method="filterNode2"
                             @node-click="playvideo"
@@ -53,7 +55,7 @@
     </div>
 </template>
 <script>
-    import { Input,Tree} from 'element-ui'//,DatePicker
+    import { Input,Tree,Message} from 'element-ui'//,DatePicker
     import 'element-ui/lib/theme-chalk/index.css'
     import 'iview/dist/styles/iview.css'
     import Hikr from "../component/Hik/Hik_video"
@@ -172,7 +174,6 @@
             },
             resize(){
                 let that = this;
-                console.log(12312);
                 this.erd.listenTo(document.getElementById("Hik"), function (element) {
                     var width = element.offsetWidth
                     var height = element.offsetHeight
@@ -206,9 +207,27 @@
                 }
             },
             playvideo(data){//地图跳转
-                let _this=this
-                if(!data.last_child){
-                    this.$refs.H1.videoPlay(data.cameraIndexCode)
+                if(data.value){
+                    if (data.value == 2) {
+                        this.$refs.H1.videoPlay(data.cameraIndexCode);//传入摄像头编码
+                    }else{//如果摄像头离线
+                        Message.error('该摄像头处于离线状态，');
+                    }
+                }
+            },
+            loadNode(node, resolve) {
+                switch (node.level) {
+                    case 1:
+                        let params ={'dir_id':node.data.id};
+                        params = this.$secret_key.func(this.$store.state.on_off, params);
+                        this.$https.fetchPost('/plugin/statistics/api_index/schoolOnline',params).then((res) => {
+                            var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
+                            resolve(res_data);
+                        })
+                        break;
+                    default:
+                        resolve([]);
+                        break;
                 }
             },
             filterNode(value, data) {
@@ -334,7 +353,6 @@
                     })
                     this.map.setZoomAndCenter(11,this.tzSite);
                 }else if(type == 3){
-                    console.log('111')
                     this.markerArr2.map((va,key) => {
                         // console.log(key)
                         let marker = new AMap.Marker({
@@ -416,14 +434,14 @@
                     }, 100);
                 }
                 if(this.data2.length == 0){
-                    this.data2 = this.data2.concat(data)
+                    this.data2 = this.data2.concat({'label':data.label,'id':data.id})
                 }else{
                     for(let i in this.data2)
                     {
                         if(this.data2[i].label == data.label)
                             return;
                     }
-                    this.data2 = this.data2.concat(data)
+                    this.data2 = this.data2.concat({'label':data.label,'id':data.id})
                 }
             },
             //显示热点
@@ -504,8 +522,6 @@
                 if(this.$refs.H1.checkWebC())
                     this.app[this.ddd].JS_ShowWnd();
             }
-
-
             else if(  this.$route.params.name)
            {
                var data = this.filterdata(this.$route.params.name)
